@@ -1,4 +1,6 @@
 # Error Handling
+
+*Read this in other language: [English](README.md), [Spanish](README.es.md)*
 ## C
 In C, there is no such thing as an error handler. Most functions return the error code and in other cases, a pointer is passed to modify it and notify the error.
 

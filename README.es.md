@@ -1,4 +1,6 @@
 # Manejador de errores
+
+*Leer en otro idioma: [English](README.md), [Spanish](README.es.md)*
 ## C
 En C no se tiene un manejador de errores como tal, la mayoria de las funciones retornan el codigo error en otras ocasiones se pasa un puntero para modificarlo y notificar el error.
 
