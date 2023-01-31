@@ -1,6 +1,6 @@
-# Error Handling
+# Manejador de errores
 ## C
-In C, there is no such thing as an error handler. Most functions return the error code and in other cases, a pointer is passed to modify it and notify the error.
+En C no se tiene un manejador de errores como tal, la mayoria de las funciones retornan el codigo error en otras ocasiones se pasa un puntero para modificarlo y notificar el error.
 
 ``` c
 #define TEST_ERROR 5
@@ -25,7 +25,7 @@ int bar(int arguments,ERROR_CODE* err_code){
 
 ```
 
-Let's see a simple example of how we would handle errors in C, the example consists of opening a file.
+Vamos a ver un simple ejemplo de como manejariamos los errores en C, el ejemplo consiste en abrir un archivo.
 
 ``` c
 #include <stdio.h>
@@ -40,10 +40,9 @@ int main(int argc, char* argv[]){
     return 0;
 }
 ```
-As you may have noticed in this example, only an error is notified, but not which error it is.
+Como habras notado en este ejemplo solo se notifica que existe un error, pero no se especifica cual es el error.
 
-To get a little more information, we can use an error number, most standard functions give us this number through the global variable **errno** defined in **<errno.h>**.
-
+Para obtener un poco mas de informacion podemos usar un numero de error, la mayoria de funciones estandar nos dan este numero mediante la variable global **errno** definida en **<errno.h>**.
 
 ``` c
 #include <stdio.h>
@@ -67,13 +66,13 @@ int main(int argc, char* argv[]){
 Codigo: 2
 ```
 
-When the file does not exist and we try to open it with the **fopen()** function, the value of errno will change to 2.
+Cuando el archivo no existe y lo intentamos abrir con la funcion **fopen()** el valor de errno cambiara a 2.
 
-Although we have more information about the error, a person still cannot understand it, for this we have the **perror(char\*)** function defined in **<stdio.h>** and **strerror(int)** defined in **<string.h>**.
+Aunque tenemos mas informacion acerca del error, todavia una persona no puede entenderlo para esto estan las funciones **perror(char\* )** definida en **<stdio.h>** y **strerror(int)** definida en **<string.h>**.
 
-**perror(char\*)** prints the string passed as a parameter, adding ": " plus the textual representation of the code.
+**perror(char\*)** nos imprime la string pasada como parametro agregando ": " mas la representacion textural del codigo.
 
-**strerror(int)** returns a string of the textual representation of the code.
+**strerror(int)** nos devuelve una string de la representacion textual del codigo.
 
 ``` c
 #include <stdio.h>
@@ -99,12 +98,11 @@ int main(int argc, char* argv[]){
 error: No such file or directory
 --- No such file or directory ---
 ```
+Podemos recrear este mismo manejo de errores para nuestras propias funciones.
 
-We can recreate this same error handling for our own functions.
+### Ejemplo
 
-### Example
-
-Let's create a small example of how to create this style of error handler, we will make a divide function that returns an error when the divisor is 0.
+Vamos a crear un pequeño ejemplo de como crear este estilo de manejador de errores, haremos una funcion de dividir que nos regrese un error cuando el divisor es 0.
 
 ```c
 int divide(int a,int b){
@@ -116,8 +114,8 @@ int main(int argc,char* argv[]){
 }
 
 ```
-At this point, we have a simple function without an error handler, now we will start modifying our code to add the error handler, in this case, we will use the "format" of modifying the error code through a pointer.
 
+En este momento tenemos una simple funcion sin un manejador de errores, ahora empezaremos a modificar nuestro codigo para agregar el manejador de errores en este caso usare el "formato" de modificar el codigo de error mediante un puntero.
 
 ```c
 typedef unsigned int ERROR_CODE;
@@ -133,14 +131,14 @@ int main(int argc,char* argv[]){
 
 ```
 
-We also define our codes in sequence, in this case, we will only have two since it is a simple example.
+Tambien definimos nuestros codigos en secuencia, este caso unicamente tendremos dos ya que es un ejemplo sencillo.
 
 ```c
 #define NO_ERROR 0
 #define DIVIDER_ZERO 1 
 ```
 
-Now within the function, we define in what cases each type of error will be notified.
+Ahora dentro de la funcion definimos en que casos se notificaran cada tipo de error.
 
 ```c
 int divide(int a,int b,ERROR_CODE* err_code){
@@ -156,9 +154,9 @@ int divide(int a,int b,ERROR_CODE* err_code){
 }
 ```
 
-At this point, we already have a function that has an error handler, now we can also textually represent the code as the strerror function.
+En este momento ya tenemos una funcion que tiene un manejador de errores, ahora tambien podemos representar textualmente el codigo como la funcion **strerror**.
 
-We start by defining an array with all codes with their textual representation.
+Empezamos definiendo un array con todos los codigos con su representacion textual.
 
 ```c
 const char* list_of_error[] = {
@@ -167,9 +165,9 @@ const char* list_of_error[] = {
 };
 ```
 
-Now we create a function that will transform the code into a textual representation.
+Ahora creamos una funcion que nos transformara del codigo a la representacion textual.
 
-To do this, we only return what we have in the array, verifying that we do not exceed the size of the array.
+Para esto unicamente retornamos lo que tenemos en el array, verificando que no se salga del tamaño del array.
 
 ```c
 int n_err = sizeof(list_of_error)/sizeof(char*);
@@ -182,7 +180,7 @@ const char* get_string_error(ERROR_CODE err_code){
 }
 ```
 
-And now we can use it to find out what fails in our code.
+Ya podemos usarlo para obtener que falla en nuestro codigo.
 
 ```c
 int main(int argc,char* argv[]){
@@ -203,4 +201,4 @@ int main(int argc,char* argv[]){
 Error: The divider is zero
 ```
 
-Done, you now have an error handler.
+Listo ya tienes un manejador de errores.
